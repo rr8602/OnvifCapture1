@@ -12,8 +12,10 @@ namespace OnvifCapture
 {
     public partial class Form1 : Form
     {
+        public int n = 100;
         public Form1()
         {
+            n = 200;
             InitializeComponent();
         }
     }
