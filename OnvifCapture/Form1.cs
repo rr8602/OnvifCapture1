@@ -16,7 +16,6 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Windows.Media.Media3D;
 
 namespace OnvifCapture
 {
@@ -26,8 +25,7 @@ namespace OnvifCapture
 
         private LibVLC _libVLC;
         private MediaPlayer _mediaPlayer;
-
-        private Onvif.Core.Client.Camera.Camera camera;
+        private Camera camera;
 
         public Form1()
         {
@@ -60,8 +58,14 @@ namespace OnvifCapture
                 var media = new Media(_libVLC, rtspUrl, FromType.FromLocation);
                 _mediaPlayer.Play(media);
 
-                var account = new Account("192.168.10.33", "root", "root");
-                camera = Onvif.Core.Client.Camera.Camera.Create(account, null);
+                var account = new Account(txt_ipAddress1.Text, txt_id1.Text, txt_password1.Text);
+                camera = Camera.Create(account, ex => MessageBox.Show($"Can not create camera : {ex}"));
+
+                // 카메라 연결 확인
+                if (camera != null)
+                {
+                    MessageBox.Show("카메라 연결 성공");
+                }
             }
             catch (Exception ex)
             {
@@ -71,17 +75,17 @@ namespace OnvifCapture
 
         private async void btn_up_Click(object sender, EventArgs e)
         {
-            var vector1 = new PTZVector { PanTilt = new Vector2D { x = 0.5f } };
-            var speed1 = new PTZSpeed { PanTilt = new Vector2D { x = 1f, y = 1f } };
+            var vector1 = new PTZVector { PanTilt = new Vector2D { x = 2.0f } };
+            var speed1 = new PTZSpeed { PanTilt = new Vector2D { x = 2f, y = 2f } };
 
-            await camera.MoveAsync(MoveType.Absolute, vector1, speed1, null);
+            await camera.MoveAsync(MoveType.Continuous, vector1, speed1, null);
         }
 
         private async void btn_zoom_in_Click(object sender, EventArgs e)
         {
             var vector2 = new PTZVector { Zoom = new Vector1D { x = 1f } };
             var speed2 = new PTZSpeed { Zoom = new Vector1D { x = 1f } };
-            await camera.MoveAsync(MoveType.Absolute, vector2, speed2, null);
+            await camera.MoveAsync(MoveType.Relative, vector2, speed2, null);
         }
     }
 }
