@@ -39,7 +39,7 @@ namespace OnvifCapture
             public static string Pan = "Pan";
             public static string Tilt = "Tilt";
             public static string Zoom = "Zoom";
-        }
+        }asdf
 
         private void btn_connect1_Click(object sender, EventArgs e)
         {
